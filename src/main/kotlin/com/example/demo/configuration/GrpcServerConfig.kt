@@ -1,19 +1,35 @@
 package com.example.demo.configuration
 
-import net.devh.boot.grpc.server.event.GrpcServerStartedEvent
+import com.example.demo.service.HelloService
+import io.grpc.ServerBuilder
 import org.slf4j.LoggerFactory
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.event.EventListener
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+import javax.annotation.PostConstruct
 
 
-@Configuration
-class GrpcServerConfig {
-    @EventListener
-    fun onServerStarted(event: GrpcServerStartedEvent) {
-        log.info("gRPC Server started, services: ${event.server.services[0].methods}")
-    }
+@Component
+class GrpcServerConfig(@Autowired val helloService: HelloService) {
 
     companion object {
         private val log = LoggerFactory.getLogger(GrpcServerConfig::class.java)
+    }
+
+    @PostConstruct
+    fun onServerStarted() {
+        log.info("gRPC Server starting...")
+        val server = ServerBuilder
+            .forPort(15001)
+            .addService(helloService)
+            .build()
+
+        Runtime.getRuntime().addShutdownHook(Thread {
+            server.shutdown()
+            server.awaitTermination()
+        })
+
+        server.start()
+        log.info("gRPC Server started")
+        server.awaitTermination()
     }
 }
