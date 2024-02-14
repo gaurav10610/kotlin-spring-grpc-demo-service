@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.example.demo.grpc;
+
+option java_multiple_files = true;
+
+service CalculatorService {
+  rpc addition (OperationRequest) returns (OperationResponse);
+  rpc subtraction (OperationRequest) returns (OperationResponse);
+  rpc multiplication (OperationRequest) returns (OperationResponse);
+  rpc division (OperationRequest) returns (OperationResponse);
+}
+
+message OperationRequest {
+  double x = 1;
+  double y = 2;
+}
+
+message OperationResponse {
+   double result = 1;
+}

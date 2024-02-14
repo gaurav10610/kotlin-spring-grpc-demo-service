@@ -1,5 +1,6 @@
 package com.example.demo.configuration
 
+import com.example.demo.service.CalculatorService
 import com.example.demo.service.HelloService
 import io.grpc.ServerBuilder
 import org.slf4j.LoggerFactory
@@ -9,7 +10,7 @@ import javax.annotation.PostConstruct
 
 
 @Component
-class GrpcServerConfig(@Autowired val helloService: HelloService) {
+class GrpcServerConfig(@Autowired val helloService: HelloService, @Autowired val calculatorService: CalculatorService) {
 
     companion object {
         private val log = LoggerFactory.getLogger(GrpcServerConfig::class.java)
@@ -21,6 +22,7 @@ class GrpcServerConfig(@Autowired val helloService: HelloService) {
         val server = ServerBuilder
             .forPort(15001)
             .addService(helloService)
+            .addService(calculatorService)
             .build()
 
         Runtime.getRuntime().addShutdownHook(Thread {
