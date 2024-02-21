@@ -1,0 +1,33 @@
+query 1 => index=* sourcetype=* error earliest=-24h
+
+query 2 => index=my_index sourcetype=my_sourcetype earliest=-7d | stats avg(response_time) as avg_response_time
+
+query 3 => index=my_index sourcetype=my_sourcetype | rex field=_raw "<username_field>(?<username>\w+)" | stats count by username
+
+query 4 => index=web_logs status=200 | stats count by clientip | where count > [ search index=web_logs status=404 | stats count ]
+
+Explanation:
+index=web_logs status=200: This part of the query searches for log events in the web_logs index where the HTTP status code is 200.
+
+| stats count by clientip: This part of the query calculates the count of log events for each unique clientip (IP address) using the stats command.
+
+| where count > [ subsearch ]: This is where the subsearch is used. The subsearch is enclosed within square brackets and is used to filter the results based on a condition derived from another search.
+
+subsearch index=web_logs status=404 | stats count: This subsearch searches for log events in the web_logs index where the HTTP status code is 404 and then calculates the count of such events using the stats command.
+
+The main search where count > [ subsearch ] filters the results from the main search (status=200) to only include clientip values where the count of status 200 is greater than the count of status 404 found in the subsearch.
+
+query 5 => index=my_index sourcetype=my_sourcetype status=success earliest=-24h | stats count by username
+
+query 6 => index=my_index sourcetype=my_sourcetype | timechart span=1h avg(response_time) as avg_response_time
+
+query 7 => index=my_index sourcetype=my_sourcetype
+           | stats count by error_type
+           | sort -count
+           | rename count as "Occurrences"
+           | eval Error_Type = upper(error_type)
+           | stats sum(Occurrences) as "Total Occurrences" by Error_Type
+           | sort -"Total Occurrences"
+           | head 10
+           | chart sum("Total Occurrences") over Error_Type
+
