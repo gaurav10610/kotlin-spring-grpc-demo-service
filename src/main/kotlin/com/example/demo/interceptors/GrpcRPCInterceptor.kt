@@ -5,8 +5,10 @@ import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
 
-class LogGrpcInterceptor : ServerInterceptor {
+@Component
+class GrpcRPCInterceptor : ServerInterceptor {
 
     override fun <ReqT : Any?, RespT : Any?> interceptCall(
         call: ServerCall<ReqT, RespT>,
@@ -18,6 +20,6 @@ class LogGrpcInterceptor : ServerInterceptor {
     }
 
     companion object {
-        private val log = LoggerFactory.getLogger(LogGrpcInterceptor::class.java)
+        private val log = LoggerFactory.getLogger(GrpcRPCInterceptor::class.java)
     }
 }
