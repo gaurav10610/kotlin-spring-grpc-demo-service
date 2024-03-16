@@ -1,6 +1,5 @@
 package com.example.demo.service
 
-import com.example.demo.configuration.GrpcServerConfig
 import com.example.demo.grpc.HelloReply
 import com.example.demo.grpc.HelloRequest
 import com.example.demo.grpc.HelloServiceGrpcKt
