@@ -1,8 +1,11 @@
 package com.example.demo.service
 
 import com.example.demo.grpc.*
+import com.example.demo.grpc.Number
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Service
 
 @Service
@@ -30,6 +33,14 @@ class CalculatorService : CalculatorServiceGrpcKt.CalculatorServiceCoroutineImpl
                     emit(PrimeNumberResponse.newBuilder().setPrime(x).build())
                 }
             }
+        }
+    }
+
+    override fun calculateAverage(requests: Flow<Number>): Flow<Average> {
+        return flow {
+            // could use transform, but it's currently experimental
+            requests.map { it.value }.toList().average()
+                .let { average -> emit(Average.newBuilder().setValue(average).build()) }
         }
     }
 

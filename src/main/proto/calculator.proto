@@ -10,6 +10,7 @@ service CalculatorService {
   rpc multiplication (OperationRequest) returns (OperationResponse);
   rpc division (OperationRequest) returns (OperationResponse);
   rpc generatePrimeNumbers (PrimeNumberRequest) returns (stream PrimeNumberResponse);
+  rpc calculateAverage(stream Number) returns (stream Average);
 }
 
 message OperationRequest {
@@ -19,6 +20,7 @@ message OperationRequest {
 
 message OperationResponse {
    double result = 1;
+}
 
 message PrimeNumberRequest {
   int32 number = 1;
@@ -26,4 +28,12 @@ message PrimeNumberRequest {
 
 message PrimeNumberResponse {
   int32 prime = 1;
+}
+
+message Number {
+  int32 value = 1;
+}
+
+message Average {
+  double value = 1;
 }
