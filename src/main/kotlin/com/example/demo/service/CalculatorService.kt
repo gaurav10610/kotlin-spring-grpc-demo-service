@@ -2,6 +2,8 @@ package com.example.demo.service
 
 import com.example.demo.grpc.*
 import com.example.demo.grpc.Number
+import io.grpc.Status
+import io.grpc.StatusException
 import kotlinx.coroutines.flow.*
 import org.springframework.stereotype.Service
 
@@ -20,6 +22,9 @@ class CalculatorService : CalculatorServiceGrpcKt.CalculatorServiceCoroutineImpl
     }
 
     override suspend fun division(request: OperationRequest): OperationResponse {
+        if(request.y == 0.0) {
+            throw StatusException(Status.INVALID_ARGUMENT.withDescription("Cannot divide by zero"))
+        }
         return OperationResponse.newBuilder().setResult(request.x / request.y).build();
     }
 

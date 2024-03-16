@@ -1,8 +1,10 @@
 package com.example.demo.client
 
 import com.example.demo.grpc.CalculatorServiceGrpcKt
+import com.example.demo.grpc.OperationRequest
 import com.example.demo.grpc.SquareRequest
 import io.grpc.ManagedChannelBuilder
+import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
@@ -45,6 +47,22 @@ class CalculaterServiceClient {
             ).collect { response ->
                 // Print the average
                 println("Square: ${response.value}")
+            }
+        }
+        channel.shutdown()
+    }
+
+    fun performDivision(dividend: Double, divisor: Double) {
+        val channel = ManagedChannelBuilder.forAddress("localhost", 15001)
+            .usePlaintext()
+            .build()
+        val stub = CalculatorServiceGrpcKt.CalculatorServiceCoroutineStub(channel)
+        runBlocking {
+            try {
+                val result = stub.division(OperationRequest.newBuilder().setX(dividend).setY(divisor).build())
+                println("$dividend / $divisor = ${result.result}")
+            } catch (e: StatusRuntimeException) {
+                println("Error encountered while division: ${e.status.description}")
             }
         }
         channel.shutdown()
