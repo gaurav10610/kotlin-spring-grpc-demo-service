@@ -1,5 +1,6 @@
 package com.example.demo.configuration
 
+import com.example.demo.interceptors.GrpcRPCInterceptor
 import com.example.demo.service.CalculatorService
 import com.example.demo.service.HelloService
 import io.grpc.ServerBuilder
@@ -10,7 +11,7 @@ import javax.annotation.PostConstruct
 
 
 @Component
-class GrpcServerConfig(@Autowired val helloService: HelloService, @Autowired val calculatorService: CalculatorService) {
+class GrpcServerConfig(@Autowired val helloService: HelloService, @Autowired val calculatorService: CalculatorService, @Autowired val rpcInterceptor: GrpcRPCInterceptor) {
 
     companion object {
         private val log = LoggerFactory.getLogger(GrpcServerConfig::class.java)
@@ -21,6 +22,7 @@ class GrpcServerConfig(@Autowired val helloService: HelloService, @Autowired val
         log.info("gRPC Server starting...")
         val server = ServerBuilder
             .forPort(15001)
+            .intercept(rpcInterceptor)
             .addService(helloService)
             .addService(calculatorService)
             .build()
