@@ -1,5 +1,6 @@
 # Travel Booking Platform
 
+**NOTE** - *Intent of this document is to just specify the approach, many things mentioned here are not implemented as this is just a sample POC*
 ## Overview
 
 The Travel Booking Platform is a modern web application built using Kotlin and Spring Boot, with gRPC APIs for inter-service communication, MongoDB for data storage, and AWS SQS for asynchronous messaging. This platform allows users to search for and book flights, hotels, and car rentals seamlessly.
