@@ -1,4 +1,18 @@
 spring:
+  data:
+    mongodb:
+      database: myfirstmongodb
+      host: localhost
+      port: 27017
+      # username: myusername
+      # password: mypassword
+      # authentication-database: admin
+      # ssl:
+      #   enabled: true
+      #   invalid-hostname-allowed: false
+      #   key-store: classpath:keystore.p12
+      #   key-store-password: keystorepassword
+      #   key-store-type: PKCS12
   h2:
     console.enabled: true
   datasource:

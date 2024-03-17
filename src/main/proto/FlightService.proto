@@ -1,0 +1,43 @@
+// FlightService.proto (gRPC service definition)
+syntax = "proto3";
+
+package com.example.demo.grpc;
+
+option java_multiple_files = true;
+
+service FlightService {
+  rpc SearchFlights(SearchRequest) returns (SearchResponse);
+  rpc BookFlight(BookingRequest) returns (BookingResponse);
+}
+
+message SearchRequest {
+  string origin = 1;
+  string destination = 2;
+  string date = 3;
+}
+
+message Flight {
+  string id = 1;
+  string airline = 2;
+  string origin = 3;
+  string destination = 4;
+  string departureTime = 5;
+  string arrivalTime = 6;
+  double price = 7;
+}
+
+message SearchResponse {
+  repeated Flight flights = 1;
+}
+
+message BookingRequest {
+  string userId = 1;
+  string flightId = 2;
+}
+
+message BookingResponse {
+  bool success = 1;
+  string message = 2;
+  string bookingId = 3;
+  string status = 4;
+}
